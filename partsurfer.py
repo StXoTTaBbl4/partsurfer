@@ -4,13 +4,11 @@ import asyncio
 import sys
 import argparse
 
-import requests
 from httpx import AsyncClient
 from bs4 import BeautifulSoup
 import csv
 import re
 
-from pprint import pprint
 
 parser = argparse.ArgumentParser(description='Fetch spare parts details from HPE PartSurfer based on serial, product or part number')
 group = parser.add_mutually_exclusive_group()
@@ -121,6 +119,7 @@ async def fetch_parse(c: AsyncClient, n: str):
     page = BeautifulSoup(response.text, 'lxml')
     if  page.find('span', class_=re.compile('ctl00_BodyContentPlaceHolder_lblErrorMsg')):
         print("Internal server error occurred", file=sys.stderr)
+        sys.exit(1)
     if page:
         parse(page, n)
 
