@@ -119,7 +119,7 @@ async def fetch_parse(c: AsyncClient, n: str):
         print(f"Site is not available, status code: {response.status_code}. Prompt number: {n}", file=sys.stderr)
         sys.exit(1)
     page = BeautifulSoup(response.text, 'lxml')
-    if  page.find('div', class_='error'):
+    if  page.find('span', class_=re.compile('ctl00_BodyContentPlaceHolder_lblErrorMsg')):
         print("Internal server error occurred", file=sys.stderr)
     if page:
         parse(page, n)
